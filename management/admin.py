@@ -20,8 +20,7 @@ class ProjectTypeAdmin(admin.ModelAdmin):
 class WorkerAdmin(UserAdmin):
     list_display = (
         "username",
-        "first_name",
-        "last_name",
+        "get_full_name",
         "email",
         "position",
     )
@@ -42,3 +41,8 @@ class WorkerAdmin(UserAdmin):
             "fields": ("first_name", "last_name", "email", "position"),
         }),
     )
+
+    def get_full_name(self, obj) -> str:
+        return f"{obj.first_name} {obj.last_name}"
+
+    get_full_name.short_description = "full_name"
