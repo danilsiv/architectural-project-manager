@@ -5,28 +5,21 @@ from management.models import ProjectType, Position, Project
 
 class ProjectTypeTest(TestCase):
     def test_str_method(self) -> None:
-        project_type = ProjectType.objects.create(
-            name="test"
-        )
+        project_type = ProjectType.objects.create(name="test")
         self.assertEqual(str(project_type), project_type.name)
 
 
 class WorkerTest(TestCase):
     def test_str_method(self) -> None:
-        position = Position.objects.create(
-            name="test"
-        )
+        position = Position.objects.create(name="test")
         worker = get_user_model().objects.create(
             username="test_user",
             password="test123user",
             first_name="test_first",
             last_name="test_last",
-            position=position
+            position=position,
         )
-        self.assertEqual(
-            str(worker),
-            f"{worker.first_name} {worker.last_name}"
-        )
+        self.assertEqual(str(worker), f"{worker.first_name} {worker.last_name}")
 
     def test_create_worker_with_correct_attributes(self) -> None:
         username = "test_user"
@@ -39,7 +32,7 @@ class WorkerTest(TestCase):
             password=password,
             first_name=first_name,
             last_name=last_name,
-            position=position
+            position=position,
         )
         self.assertEqual(worker.username, username)
         self.assertTrue(worker.check_password(password))
@@ -64,7 +57,7 @@ class ProjectTest(TestCase):
             name="test",
             description="test description",
             deadline="2024-12-12",
-            project_type=project_type
+            project_type=project_type,
         )
         self.assertEqual(str(project), project.name)
 

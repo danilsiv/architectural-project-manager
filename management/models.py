@@ -7,7 +7,7 @@ class ProjectType(models.Model):
     name = models.CharField(max_length=255)
 
     class Meta:
-        ordering = ("name", )
+        ordering = ("name",)
 
     def __str__(self) -> str:
         return self.name
@@ -15,9 +15,7 @@ class ProjectType(models.Model):
 
 class Worker(AbstractUser):
     position = models.ForeignKey(
-        "Position",
-        on_delete=models.CASCADE,
-        related_name="workers"
+        "Position", on_delete=models.CASCADE, related_name="workers"
     )
 
     def __str__(self) -> str:
@@ -28,10 +26,7 @@ class Worker(AbstractUser):
 
 
 class Position(models.Model):
-    name = models.CharField(
-        max_length=255,
-        unique=True
-    )
+    name = models.CharField(max_length=255, unique=True)
 
     def __str__(self) -> str:
         return self.name
@@ -43,17 +38,13 @@ class Project(models.Model):
         ("HP", "High Priority"),
         ("MP", "Medium Priority"),
         ("LP", "Low Priority"),
-        ("BL", "Backlog")
+        ("BL", "Backlog"),
     ]
     name = models.CharField(max_length=255)
     description = models.TextField()
     deadline = models.DateField()
     is_completed = models.BooleanField(default=False)
-    priority = models.CharField(
-        max_length=2,
-        choices=PRIORITY_CHOICES,
-        default="MP"
-    )
+    priority = models.CharField(max_length=2, choices=PRIORITY_CHOICES, default="MP")
     project_type = models.ForeignKey(ProjectType, on_delete=models.CASCADE)
     team = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="projects")
 
