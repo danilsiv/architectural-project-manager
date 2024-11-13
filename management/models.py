@@ -18,6 +18,9 @@ class Worker(AbstractUser):
         "Position", on_delete=models.CASCADE, related_name="workers"
     )
 
+    class Meta:
+        ordering = ["position",]
+
     def __str__(self) -> str:
         return f"{self.first_name} {self.last_name} ({self.position.name})"
 
@@ -27,6 +30,9 @@ class Worker(AbstractUser):
 
 class Position(models.Model):
     name = models.CharField(max_length=255, unique=True)
+
+    class Meta:
+        ordering = ["name",]
 
     def __str__(self) -> str:
         return self.name
