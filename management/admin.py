@@ -47,3 +47,9 @@ class WorkerAdmin(UserAdmin):
         return f"{obj.first_name} {obj.last_name}"
 
     get_full_name.short_description = "full_name"
+
+
+@admin.register(Project)
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ("name", "project_type", "deadline", "priority", "is_completed")
+    search_fields = ("name", "project_type__name")
