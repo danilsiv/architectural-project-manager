@@ -19,7 +19,7 @@ class Worker(AbstractUser):
     )
 
     def __str__(self) -> str:
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.first_name} {self.last_name} ({self.position.name})"
 
     def get_absolute_url(self) -> str:
         pass
@@ -47,6 +47,9 @@ class Project(models.Model):
     priority = models.CharField(max_length=2, choices=PRIORITY_CHOICES, default="MP")
     project_type = models.ForeignKey(ProjectType, on_delete=models.CASCADE)
     team = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="projects")
+
+    class Meta:
+        ordering = ("is_completed", "priority", "deadline")
 
     def get_absolute_url(self) -> str:
         pass
