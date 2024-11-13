@@ -7,7 +7,7 @@ class ProjectType(models.Model):
     name = models.CharField(max_length=255)
 
     class Meta:
-        ordering = ("name",)
+        ordering = ["name",]
 
     def __str__(self) -> str:
         return self.name
@@ -49,7 +49,18 @@ class Project(models.Model):
     team = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="projects")
 
     class Meta:
-        ordering = ("is_completed", "priority", "deadline")
+        ordering = [
+            "is_completed",
+            models.Case(
+                models.When(priority="CR", then=0),
+                models.When(priority="HP", then=1),
+                models.When(priority="MP", then=2),
+                models.When(priority="LP", then=3),
+                models.When(priority="BL", then=4),
+                output_field=models.IntegerField()
+            ),
+            "deadline"
+        ]
 
     def get_absolute_url(self) -> str:
         pass
