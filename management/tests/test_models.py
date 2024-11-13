@@ -19,7 +19,10 @@ class WorkerTest(TestCase):
             last_name="test_last",
             position=position,
         )
-        self.assertEqual(str(worker), f"{worker.first_name} {worker.last_name}")
+        self.assertEqual(
+            str(worker),
+            f"{worker.first_name} {worker.last_name} ({worker.position.name})",
+        )
 
     def test_create_worker_with_correct_attributes(self) -> None:
         username = "test_user"
