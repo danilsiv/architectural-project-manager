@@ -39,11 +39,11 @@ class AdminProjectTypeTests(TestCase):
         """
         Test that name of project type is in search_field on
         list page of project types
-        :return:
         """
         url = reverse("admin:management_projecttype_changelist")
-        response = self.client.get(url)
-        self.assertContains(response, "name")
+        response = self.client.get(url, {"q": self.project_type.name})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.project_type.name)
 
 
 class AdminWorkerTests(TestCase):
