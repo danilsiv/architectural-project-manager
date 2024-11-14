@@ -21,6 +21,7 @@ class AdminPositionTests(TestCase):
         """
         url = reverse("admin:management_position_changelist")
         response = self.client.get(url, {"q": self.position.name})
+        self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.position.name)
 
 
