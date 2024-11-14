@@ -18,11 +18,10 @@ class AdminPositionTests(TestCase):
     def test_position_name_should_be_in_search_field(self) -> None:
         """
         Test that position's name is in search_field on position's list page
-        :return:
         """
         url = reverse("admin:management_position_changelist")
-        response = self.client.get(url)
-        self.assertContains(response, "name")
+        response = self.client.get(url, {"q": self.position.name})
+        self.assertContains(response, self.position.name)
 
 
 class AdminProjectTypeTests(TestCase):
