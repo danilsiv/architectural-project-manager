@@ -1,8 +1,9 @@
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+from datetime import datetime
 
-from management.models import Position, ProjectType
+from management.models import Position, ProjectType, Project
 
 
 class AdminPositionTests(TestCase):
@@ -131,3 +132,54 @@ class AdminWorkerTests(TestCase):
 
         for field in fields:
             self.assertContains(response, field)
+
+
+class AdminProjectTests(TestCase):
+    def setUp(self) -> None:
+        self.client = Client()
+        self.admin_user = get_user_model().objects.create_superuser(
+            username="test_admin",
+            password="test123admin"
+        )
+        self.client.force_login(self.admin_user)
+        project_type = ProjectType.objects.create(name="test_project_type")
+        self.project = Project.objects.create(
+            name="test_project",
+            description="test_description",
+            deadline="2025-11-12",
+            project_type=project_type
+        )
+
+    def test_project_attributes_listed(self) -> None:
+        """
+        Test that project's name, project_type, deadline, priority,
+        is_completed is correctly displayed in list_display
+        """
+        url = reverse("admin:management_project_changelist")
+        response = self.client.get(url)
+
+        formatted_deadline = datetime.strptime(
+            self.project.deadline, '%Y-%m-%d').strftime('%b. %d, %Y')
+
+        project_priority = self.project.get_priority_display()
+
+        self.assertContains(response, self.project.name)
+        self.assertContains(response, self.project.project_type.name)
+        self.assertContains(response, formatted_deadline)
+        self.assertContains(response, project_priority)
+        self.assertContains(response, self.project.is_completed)
+
+    def test_project_attributes_in_search_field(self) -> None:
+        """
+        Test that project's name and name of project_type is in
+        search_field on project's list_page
+        """
+        url = reverse("admin:management_project_changelist")
+
+        response = self.client.get(url, {"q": self.project.name})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.project.name)
+
+        response = self.client.get(url, {"q": self.project.project_type.name})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.project.project_type.name)
