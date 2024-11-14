@@ -25,7 +25,8 @@ class Worker(AbstractUser):
         ordering = ["position",]
 
     def __str__(self) -> str:
-        return f"{self.first_name} {self.last_name} ({self.position.name})"
+        position_name = self.position.name if self.position else "No Position"
+        return f"{self.first_name} {self.last_name} ({position_name})"
 
     def get_absolute_url(self) -> str:
         pass
