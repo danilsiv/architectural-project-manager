@@ -23,6 +23,11 @@ class Team(models.Model):
         blank=True
     )
 
+    @property
+    def number_of_members(self) -> int:
+        return self.members.count()
+
+
     def __str__(self) -> str:
         return self.name
 

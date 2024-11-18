@@ -18,7 +18,7 @@ class ProjectTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ("name", "team_lead",)
+    list_display = ("name", "team_lead", "number_of_members",)
 
 
 @admin.register(Worker)
@@ -34,7 +34,7 @@ class WorkerAdmin(UserAdmin):
         (
             "Additional information",
             {
-                "fields": ("position",),
+                "fields": ("position", "team"),
             },
         ),
     )
@@ -42,7 +42,9 @@ class WorkerAdmin(UserAdmin):
         (
             "Additional information",
             {
-                "fields": ("first_name", "last_name", "email", "position"),
+                "fields": (
+                    "first_name", "last_name", "email", "position", "team"
+                ),
             },
         ),
     )
@@ -55,5 +57,5 @@ class WorkerAdmin(UserAdmin):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ("name", "project_type", "deadline", "priority", "is_completed")
+    list_display = ("name", "team", "deadline", "priority", "is_completed")
     search_fields = ("name", "project_type__name")
