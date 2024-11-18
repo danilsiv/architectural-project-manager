@@ -13,7 +13,28 @@ class ProjectType(models.Model):
         return self.name
 
 
+class Team(models.Model):
+    name = models.CharField(max_length=255)
+    team_lead = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        related_name="leading_team",
+        null=True,
+        blank=True
+    )
+
+    def __str__(self) -> str:
+        return self.name
+
+
 class Worker(AbstractUser):
+    team = models.ForeignKey(
+        Team,
+        on_delete=models.SET_NULL,
+        related_name="members",
+        null=True,
+        blank=True
+    )
     position = models.ForeignKey(
         "Position",
         on_delete=models.CASCADE,
@@ -56,7 +77,13 @@ class Project(models.Model):
     is_completed = models.BooleanField(default=False)
     priority = models.CharField(max_length=2, choices=PRIORITY_CHOICES, default="MP")
     project_type = models.ForeignKey(ProjectType, on_delete=models.CASCADE)
-    team = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="projects")
+    team = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        related_name="projects",
+        null=True,
+        blank=True
+    )
 
     class Meta:
         ordering = [
