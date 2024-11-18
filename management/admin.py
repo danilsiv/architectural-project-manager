@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from management.models import Worker, Position, ProjectType, Project
+from management.models import (
+    Worker, Position, ProjectType, Project, Team
+)
 
 
 @admin.register(Position)
@@ -12,6 +14,11 @@ class PositionAdmin(admin.ModelAdmin):
 @admin.register(ProjectType)
 class ProjectTypeAdmin(admin.ModelAdmin):
     search_fields = ("name",)
+
+
+@admin.register(Team)
+class TeamAdmin(admin.ModelAdmin):
+    list_display = ("name", "team_lead",)
 
 
 @admin.register(Worker)
