@@ -30,6 +30,7 @@ class WorkerAdmin(UserAdmin):
         "position",
     )
     search_fields = ("username", "first_name", "last_name", "position__name")
+    ordering = ("position",)
     fieldsets = UserAdmin.fieldsets + (
         (
             "Additional information",
