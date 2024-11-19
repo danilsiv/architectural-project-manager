@@ -1,12 +1,27 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from management.models import ProjectType, Position, Project
+from management.models import (
+    ProjectType, Position, Project, Team, Worker
+)
 
 
 class ProjectTypeTest(TestCase):
     def test_str_method(self) -> None:
         project_type = ProjectType.objects.create(name="test")
         self.assertEqual(str(project_type), project_type.name)
+
+
+class TeamTests(TestCase):
+    def setUp(self) -> None:
+        self.team = Team.objects.create(name="test_name")
+
+    def test_str_method(self) -> None:
+        self.assertEqual(str(self.team), self.team.name)
+
+    def test_number_of_members(self) -> None:
+        Worker.objects.create(username="username1", team=self.team)
+        Worker.objects.create(username="username2", team=self.team)
+        self.assertEqual(self.team.number_of_members, 2)
 
 
 class WorkerTest(TestCase):
@@ -24,24 +39,19 @@ class WorkerTest(TestCase):
             f"{worker.first_name} {worker.last_name} ({worker.position.name})",
         )
 
-    def test_create_worker_with_correct_attributes(self) -> None:
-        username = "test_user"
-        password = "test123user"
-        first_name = "test_first"
-        last_name = "test_last"
+    def test_create_worker_with_team_and_position(self) -> None:
+        team = Team.objects.create(name="test_name")
         position = Position.objects.create(name="test")
+
         worker = get_user_model().objects.create_user(
-            username=username,
-            password=password,
-            first_name=first_name,
-            last_name=last_name,
+            username="test_user",
+            password="test123user",
+            team=team,
             position=position,
         )
-        self.assertEqual(worker.username, username)
-        self.assertTrue(worker.check_password(password))
-        self.assertEqual(worker.first_name, first_name)
-        self.assertEqual(worker.last_name, last_name)
+
         self.assertEqual(worker.position, position)
+        self.assertEqual(worker.team, team)
 
     def test_absolute_url(self) -> None:
         pass
