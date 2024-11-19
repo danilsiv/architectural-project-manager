@@ -83,7 +83,7 @@ class Project(models.Model):
     priority = models.CharField(max_length=2, choices=PRIORITY_CHOICES, default="MP")
     project_type = models.ForeignKey(ProjectType, on_delete=models.CASCADE)
     team = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        Team,
         on_delete=models.SET_NULL,
         related_name="projects",
         null=True,
