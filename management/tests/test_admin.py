@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from datetime import datetime
 
-from management.models import Position, ProjectType, Project
+from management.models import Position, ProjectType, Project, Team, Worker
 
 
 class AdminPositionTests(TestCase):
@@ -45,6 +45,31 @@ class AdminProjectTypeTests(TestCase):
         response = self.client.get(url, {"q": self.project_type.name})
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.project_type.name)
+
+
+class AdminTeamTests(TestCase):
+    def setUp(self) -> None:
+        self.client = Client()
+        self.admin_user = get_user_model().objects.create_superuser(
+            username="test_admin",
+            password="test123admin"
+        )
+        self.client.force_login(self.admin_user)
+        team_lead = Worker.objects.create(username="test_team_lead")
+        self.team = Team.objects.create(name="test_name", team_lead=team_lead)
+
+    def test_team_attributes_listed(self) -> None:
+        """
+        Test that team's name, team_lead, number_of_members
+        is correctly displayed in list_display
+        """
+        url = reverse("admin:management_team_changelist")
+        response = self.client.get(url)
+
+        self.assertContains(response, self.team.name)
+        self.assertContains(response, self.team.team_lead)
+        self.assertContains(response, self.team.number_of_members)
+
 
 
 class AdminWorkerTests(TestCase):
@@ -143,11 +168,13 @@ class AdminProjectTests(TestCase):
         )
         self.client.force_login(self.admin_user)
         project_type = ProjectType.objects.create(name="test_project_type")
+        team = Team.objects.create(name="test_name")
         self.project = Project.objects.create(
             name="test_project",
             description="test_description",
             deadline="2025-11-12",
-            project_type=project_type
+            project_type=project_type,
+            team=team
         )
 
     def test_project_attributes_listed(self) -> None:
@@ -160,11 +187,10 @@ class AdminProjectTests(TestCase):
 
         formatted_deadline = datetime.strptime(
             self.project.deadline, '%Y-%m-%d').strftime('%b. %d, %Y')
-
         project_priority = self.project.get_priority_display()
 
         self.assertContains(response, self.project.name)
-        self.assertContains(response, self.project.project_type.name)
+        self.assertContains(response, self.project.team)
         self.assertContains(response, formatted_deadline)
         self.assertContains(response, project_priority)
         self.assertContains(response, self.project.is_completed)
