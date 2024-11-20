@@ -1,0 +1,8 @@
+<p>This page will have the following list of workers</p>
+<ul>
+  {% for worker in worker_list %}
+    {% if worker.first_name %}
+      <li>{{ worker }}</li>
+    {% endif %}
+  {% endfor %}
+</ul>

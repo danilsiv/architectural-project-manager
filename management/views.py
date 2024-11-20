@@ -29,3 +29,8 @@ class ProjectTypeListView(generic.ListView):
 
 class TeamListView(generic.ListView):
     model = Team
+
+
+class WorkerListView(generic.ListView):
+    model = Worker
+    queryset = Worker.objects.select_related("position")
