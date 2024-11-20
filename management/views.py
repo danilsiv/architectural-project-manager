@@ -25,3 +25,7 @@ class ProjectTypeListView(generic.ListView):
     model = ProjectType
     template_name = "management/project_type_list.html"
     context_object_name = "project_type_list"
+
+
+class TeamListView(generic.ListView):
+    model = Team
