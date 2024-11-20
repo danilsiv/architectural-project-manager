@@ -38,3 +38,7 @@ class WorkerListView(generic.ListView):
 
 class PositionListView(generic.ListView):
     model = Position
+
+
+class ProjectListView(generic.ListView):
+    model = Project
