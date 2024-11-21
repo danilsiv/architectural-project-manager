@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <p>This page will have the following content</p>
+  <p>{{ team }}</p>
+  <p>{{ team.team_lead }}</p>
+  <p>list of members:</p>
+  <ul>
+    {% for worker in team.members.all %}
+      <li>{{ worker }}</li>
+    {% endfor %}
+  </ul>
+  <p>list of members:</p>
+  <ul>
+    {% for project in team.projects.all %}
+      <li>{{ project }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

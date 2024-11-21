@@ -1,3 +1,4 @@
+from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.views import generic
@@ -29,6 +30,14 @@ class ProjectTypeListView(generic.ListView):
 
 class TeamListView(generic.ListView):
     model = Team
+
+
+class TeamDetailView(generic.DetailView):
+    model = Team
+
+    def get_queryset(self) -> QuerySet:
+        return super().get_queryset().prefetch_related(
+            "members__position").select_related("team_lead__position")
 
 
 class WorkerListView(generic.ListView):
