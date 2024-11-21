@@ -59,3 +59,11 @@ class PositionListView(generic.ListView):
 
 class ProjectListView(generic.ListView):
     model = Project
+
+
+class ProjectDetailView(generic.DetailView):
+    model = Project
+
+    def get_queryset(self) -> QuerySet:
+        return super().get_queryset().select_related(
+            "project_type").select_related("team")

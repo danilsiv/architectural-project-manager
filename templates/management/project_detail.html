@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <p>This page will have the following content</p>
+  <p>{{ project }}</p>
+  <p>{{ project.description }}</p>
+  <p>{{ project.deadline }}</p>
+  <p>{{ project.is_completed }}</p>
+  <p>{{ project.get_priority_display }}</p>
+  <p>{{ project.project_type }}</p>
+  <p>{{ project.team }}</p>
+{% endblock %}
