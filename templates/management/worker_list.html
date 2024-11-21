@@ -1,3 +1,6 @@
+{% extends "base.html" %}
+
+{% block content %}
 <p>This page will have the following list of workers</p>
 <ul>
   {% for worker in worker_list %}
@@ -6,3 +9,4 @@
     {% endif %}
   {% endfor %}
 </ul>
+{% endblock %}

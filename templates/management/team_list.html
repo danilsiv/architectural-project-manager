@@ -1,6 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
 <p>This page will have the following list of teams</p>
 <ul>
   {% for team in team_list %}
     <li>{{ team }}</li>
   {% endfor %}
 </ul>
+{% endblock %}

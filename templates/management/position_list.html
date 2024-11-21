@@ -1,6 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
 <p>This page will have the following list of positions</p>
 <ul>
   {% for position in position_list %}
     <li>{{ position }}</li>
   {% endfor %}
 </ul>
+{% endblock %}
