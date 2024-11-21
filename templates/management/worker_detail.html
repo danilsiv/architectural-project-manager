@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <p>This page will have the following content</p>
+  <p><strong>Full name: </strong>{{ worker.first_name }} {{ worker.last_name }}</p>
+  <p><strong>Team: </strong>{{ worker.team }}</p>
+  <p><strong>Position: </strong>{{ worker.position }}</p>
+{% endblock %}
