@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 
-from django.conf.global_settings import AUTH_USER_MODEL, STATICFILES_DIRS, INTERNAL_IPS
+from django.conf.global_settings import AUTH_USER_MODEL, STATICFILES_DIRS, INTERNAL_IPS, LOGIN_REDIRECT_URL
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -132,6 +132,8 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "management.Worker"
+
+LOGIN_REDIRECT_URL = "/management/"
 
 INTERNAL_IPS = [
     "127.0.0.1",
