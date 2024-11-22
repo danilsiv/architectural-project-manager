@@ -5,4 +5,8 @@
 <p>num_teams: {{ num_teams }}</p>
 <p>num_workers: {{ num_workers }}</p>
 <p>num_projects: {{ num_projects }} </p>
+<form id="logout-form" method="post" action="{% url 'logout' %}">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-link">Logout</button>
+</form>
 {% endblock %}
