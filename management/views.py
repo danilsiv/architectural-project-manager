@@ -26,6 +26,7 @@ class ProjectTypeListView(generic.ListView):
     model = ProjectType
     template_name = "management/project_type_list.html"
     context_object_name = "project_type_list"
+    paginate_by = 15
 
 
 class TeamListView(generic.ListView):
@@ -43,6 +44,7 @@ class TeamDetailView(generic.DetailView):
 class WorkerListView(generic.ListView):
     model = Worker
     queryset = Worker.objects.select_related("position")
+    paginate_by = 15
 
 
 class WorkerDetailView(generic.DetailView):
@@ -55,10 +57,12 @@ class WorkerDetailView(generic.DetailView):
 
 class PositionListView(generic.ListView):
     model = Position
+    paginate_by = 15
 
 
 class ProjectListView(generic.ListView):
     model = Project
+    paginate_by = 5
 
 
 class ProjectDetailView(generic.DetailView):
