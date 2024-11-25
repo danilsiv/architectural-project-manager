@@ -31,6 +31,9 @@ class ProjectTypeListView(generic.ListView):
 
 class TeamListView(generic.ListView):
     model = Team
+    queryset = Team.objects.prefetch_related(
+        "members").select_related("team_lead__position")
+    paginate_by = 10
 
 
 class TeamDetailView(generic.DetailView):
