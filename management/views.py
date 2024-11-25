@@ -26,6 +26,7 @@ class ProjectTypeListView(generic.ListView):
     model = ProjectType
     template_name = "management/project_type_list.html"
     context_object_name = "project_type_list"
+    queryset = ProjectType.objects.annotate(project_count=Count("projects"))
     paginate_by = 15
 
 

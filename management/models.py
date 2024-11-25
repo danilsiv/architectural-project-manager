@@ -81,7 +81,11 @@ class Project(models.Model):
     deadline = models.DateField()
     is_completed = models.BooleanField(default=False)
     priority = models.CharField(max_length=2, choices=PRIORITY_CHOICES, default="MP")
-    project_type = models.ForeignKey(ProjectType, on_delete=models.CASCADE)
+    project_type = models.ForeignKey(
+        ProjectType,
+        on_delete=models.CASCADE,
+        related_name="projects"
+    )
     team = models.ForeignKey(
         Team,
         on_delete=models.SET_NULL,
