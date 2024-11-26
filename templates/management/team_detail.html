@@ -1,19 +1,160 @@
-{% extends "base.html" %}
+{% extends 'layouts/base-presentation.html' %}
+
+{% block title %} Presentation {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block body_class %} index-page {% endblock body_class %}
 
 {% block content %}
-  <p>This page will have the following content</p>
-  <p>{{ team }}</p>
-  <p>{{ team.team_lead }}</p>
-  <p>list of members:</p>
-  <ul>
-    {% for worker in team.members.all %}
-      <li>{{ worker }}</li>
-    {% endfor %}
-  </ul>
-  <p>list of members:</p>
-  <ul>
-    {% for project in team.projects.all %}
-      <li>{{ project }}</li>
-    {% endfor %}
-  </ul>
-{% endblock %}
+
+<section class="team-details py-5">
+  <div class="container">
+    <h2 class="text-left mb-4 mt-6" style="color: #ce0f9c;">Team Details</h2>
+    <div class="row">
+      <div class="col-12">
+        <div class="card team-card">
+          <div class="card-body">
+
+            <h5 class="card-title">{{ team.name }}</h5>
+            <p class="card-text"><strong>Team Lead: </strong><a href="{% url 'management:worker-detail' team.team_lead.id %}">{{ team.team_lead }}</a></p>
+
+            <div class="card-meta">
+
+              <div class="d-flex justify-content-between">
+
+                <div class="team-members">
+                  <p><strong>List of Members:</strong></p>
+                  <ul>
+                    {% for worker in team.members.all %}
+                      <li><a href="{% url 'management:worker-detail' worker.id %}">{{ worker }}</a></li>
+                    {% endfor %}
+                  </ul>
+                </div>
+
+                <div class="team-projects">
+                  <p><strong>List of Projects:</strong></p>
+                  <ul>
+                    {% for project in team.projects.all %}
+                      <li><a href="{% url 'management:project-detail' project.id %}">{{ project.name }}</a></li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.team-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.team-card .card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.team-card .card-text {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.team-card .card-meta p {
+  font-size: 0.95rem;
+  margin: 4px 0;
+  color: #444;
+}
+
+.team-members, .team-projects {
+  width: 48%;
+}
+
+.team-card .card-meta ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.team-card .card-meta ul li {
+  padding: 5px 0;
+}
+
+.d-flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+  .d-flex {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .team-members, .team-projects {
+    width: 100%;
+  }
+}
+
+a {
+  color: #444;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #ce0f9c;
+  font-weight: bold;
+}
+</style>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}
+
+  <script src="{{ ASSETS_ROOT }}/js/plugins/countup.min.js"></script>
+  <script src="{{ ASSETS_ROOT }}/js/plugins/choices.min.js"></script>
+  <script src="{{ ASSETS_ROOT }}/js/plugins/rellax.min.js"></script>
+  <script src="{{ ASSETS_ROOT }}/js/plugins/tilt.min.js"></script>
+  <script src="{{ ASSETS_ROOT }}/js/plugins/choices.min.js"></script>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTTfWur0PDbZWPr7Pmq8K3jiDp0_xUziI"></script>
+  <script src="{{ ASSETS_ROOT }}/js/soft-design-system.min.js?v=1.0.1" type="text/javascript"></script>
+  <script type="text/javascript">
+    if (document.getElementById('state1')) {
+      const countUp = new CountUp('state1', document.getElementById("state1").getAttribute("countTo"));
+      if (!countUp.error) {
+        countUp.start();
+      } else {
+        console.error(countUp.error);
+      }
+    }
+    if (document.getElementById('state2')) {
+      const countUp1 = new CountUp('state2', document.getElementById("state2").getAttribute("countTo"));
+      if (!countUp1.error) {
+        countUp1.start();
+      } else {
+        console.error(countUp1.error);
+      }
+    }
+    if (document.getElementById('state3')) {
+      const countUp2 = new CountUp('state3', document.getElementById("state3").getAttribute("countTo"));
+      if (!countUp2.error) {
+        countUp2.start();
+      } else {
+        console.error(countUp2.error);
+      };
+    }
+  </script>
+
+{% endblock javascripts %}

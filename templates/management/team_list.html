@@ -23,8 +23,8 @@
         </thead>
         <tbody>
             {% for team in team_list %}
-              <tr>
-                <td>{{ team.name }}</td>
+            <tr onclick="window.location.href='{% url 'management:team-detail' team.id %}'" style="cursor: pointer;">
+              <td>{{ team.name }}</td>
                 <td>
                   {% if team.team_lead %}
                     {{ team.team_lead }}
@@ -32,9 +32,9 @@
                     No Team lead
                   {% endif %}
                 </td>
-                <td>{{ team.member_count }}</td>
-              </tr>
-            {% endfor %}
+              <td>{{ team.member_count }}</td>
+            </tr>
+          {% endfor %}
         </tbody>
       </table>
     {% else %}
