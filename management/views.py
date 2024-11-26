@@ -70,7 +70,7 @@ class PositionDetailView(generic.DetailView):
     model = Position
 
     def get_queryset(self) -> QuerySet:
-        return super().get_queryset().prefetch_related("workers__position")
+        return super().get_queryset().prefetch_related("workers__team")
 
 
 class ProjectListView(generic.ListView):
