@@ -9,104 +9,71 @@
 
 {% block content %}
 
-
-<section class="projects-list py-5">
+<section class="projects-table py-5">
   <div class="container">
     <h2 class="text-left mb-4 mt-6" style="color: #ce0f9c;">Projects List</h2>
-    <div class="row">
-      {% if project_list %}
-        {% for project in project_list %}
-          <div class="col-12 mb-4">
-            <div class="card project-card">
-              <div class="card-body">
-                <h5 class="card-title">{{ project.name }}</h5>
-                <p class="card-text">{{ project.description }}</p>
-                <div class="card-meta">
-                  <p><strong>Priority:</strong> {{ project.get_priority_display }}</p>
-                  <p><strong>Deadline:</strong> {{ project.deadline }}</p>
-                  <div class="status-wrapper">
-                    <p class="status {{ project.is_completed|yesno:'completed,pending' }}">{{ project.is_completed|yesno:"Completed,Pending" }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        {% endfor %}
-      {% else %}
-        <p>There are no projects yet</p>
-      {% endif %}
-    </div>
+    {% if project_list %}
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Project Name</th>
+            <th>Priority</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for project in project_list %}
+            <tr onclick="window.location.href='{% url 'management:project-detail' project.id %}'" style="cursor: pointer;">
+              <td>{{ project.name }}</td>
+              <td>{{ project.get_priority_display }}</td>
+              <td class="{{ project.is_completed|yesno:'text-success,text-danger' }}">
+                {{ project.is_completed|yesno:"Completed,Pending" }}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>There are no projects yet</p>
+    {% endif %}
   </div>
 </section>
 
 <style>
-.projects-list {
-  padding-top: 2rem;
-  padding-bottom: 3rem;
-}
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
 
-.project-card {
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
+  th, td {
+    padding: 12px 15px;
+    text-align: left;
+  }
 
-.project-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
-}
+  th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+  }
 
-.card-body {
-  padding: 1.5rem;
-}
+  tr {
+    transition: background-color 0.3s;
+  }
 
-.card-title {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 0.75rem;
-}
+  tr:hover {
+    background-color: #f1f1f1;
+  }
 
-.card-text {
-  font-size: 1rem;
-  color: #555;
-  margin-bottom: 1rem;
-}
+  tr[onclick] {
+    cursor: pointer;
+  }
 
-.card-meta p {
-  font-size: 0.875rem;
-  color: #777;
-  line-height: 1.5;
-}
+  .text-success {
+    color: #218838;
+  }
 
-.status-wrapper {
-  margin-top: 1rem;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.status {
-  font-weight: bold;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 0.875rem;
-  text-transform: uppercase;
-}
-
-.status.completed {
-  color: white;
-  background-color: #28a745; /* Green */
-  border: 2px solid #28a745;
-}
-
-.status.pending {
-  color: white;
-  background-color: #dc3545; /* Red */
-  border: 2px solid #dc3545;
-}
-
+  .text-danger {
+    color: #dc3545;
+  }
 </style>
 
 {% endblock content %}

@@ -68,7 +68,7 @@ class PositionListView(generic.ListView):
 
 class ProjectListView(generic.ListView):
     model = Project
-    paginate_by = 5
+    paginate_by = 15
 
 
 class ProjectDetailView(generic.DetailView):
