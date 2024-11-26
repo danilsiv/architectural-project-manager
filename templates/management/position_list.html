@@ -22,7 +22,7 @@
         </thead>
         <tbody>
             {% for position in position_list %}
-                <tr>
+                <tr onclick="window.location.href='{% url 'management:position-detail' position.id %}'" style="cursor: pointer;">
                   <td>{{ position.name }}</td>
                   <td>{{ position.worker_count }}</td>
                 </tr>

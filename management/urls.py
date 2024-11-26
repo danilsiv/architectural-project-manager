@@ -11,12 +11,14 @@ from management.views import (
     WorkerDetailView,
     ProjectDetailView,
     PositionDetailView,
+    ProjectTypeDetailView,
 )
 
 
 urlpatterns = [
     path("", index, name="index"),
     path("project-types/", ProjectTypeListView.as_view(), name="project-type-list"),
+    path("project-types/<int:pk>", ProjectTypeDetailView.as_view(), name="project-type-detail"),
     path("teams/", TeamListView.as_view(), name="team-list"),
     path("teams/<int:pk>/", TeamDetailView.as_view(), name="team-detail"),
     path("workers/", WorkerListView.as_view(), name="worker-list"),

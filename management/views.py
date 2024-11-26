@@ -30,6 +30,12 @@ class ProjectTypeListView(generic.ListView):
     paginate_by = 15
 
 
+class ProjectTypeDetailView(generic.DetailView):
+    model = ProjectType
+    template_name = "management/project_type_detail.html"
+    context_object_name = "project_type"
+
+
 class TeamListView(generic.ListView):
     model = Team
     queryset = Team.objects.select_related(
