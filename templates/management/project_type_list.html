@@ -22,7 +22,7 @@
         </thead>
         <tbody>
             {% for project_type in project_type_list %}
-                <tr>
+                <tr onclick="window.location.href='{% url 'management:project-type-detail' project_type.id %}'" style="cursor: pointer;">
                   <td>{{ project_type.name }}</td>
                   <td>{{ project_type.project_count }}</td>
                 </tr>
