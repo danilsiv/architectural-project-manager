@@ -66,6 +66,13 @@ class PositionListView(generic.ListView):
     paginate_by = 15
 
 
+class PositionDetailView(generic.DetailView):
+    model = Position
+
+    def get_queryset(self) -> QuerySet:
+        return super().get_queryset().prefetch_related("workers__position")
+
+
 class ProjectListView(generic.ListView):
     model = Project
     paginate_by = 15

@@ -10,6 +10,7 @@ from management.views import (
     TeamDetailView,
     WorkerDetailView,
     ProjectDetailView,
+    PositionDetailView,
 )
 
 
@@ -21,6 +22,7 @@ urlpatterns = [
     path("workers/", WorkerListView.as_view(), name="worker-list"),
     path("workers/<int:pk>/", WorkerDetailView.as_view(), name="worker-detail"),
     path("positions/", PositionListView.as_view(), name="position-list"),
+    path("positions/<int:pk>/", PositionDetailView.as_view(), name="position-detail"),
     path("projects/", ProjectListView.as_view(), name="project-list"),
     path("projects/<int:pk>/", ProjectDetailView.as_view(), name="project-detail"),
 ]
