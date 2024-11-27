@@ -105,3 +105,9 @@ class ProjectUpdateView(generic.UpdateView):
     fields = "__all__"
     success_url = reverse_lazy("management:project-list")
     template_name = "management/project_form.html"
+
+
+class ProjectDeleteView(generic.DeleteView):
+    model = Project
+    success_url = reverse_lazy("management:project-list")
+    template_name = "management/project_confirm_delete.html"
