@@ -1,6 +1,7 @@
 from django.db.models import QuerySet, Count
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views import generic
 
 from management.models import (
@@ -90,3 +91,10 @@ class ProjectDetailView(generic.DetailView):
     def get_queryset(self) -> QuerySet:
         return super().get_queryset().select_related(
             "project_type").select_related("team")
+
+
+class ProjectCreateView(generic.CreateView):
+    model = Project
+    fields = "__all__"
+    success_url = reverse_lazy("management:project-list")
+    template_name = "management/project_form.html"

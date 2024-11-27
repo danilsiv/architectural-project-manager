@@ -12,6 +12,7 @@ from management.views import (
     ProjectDetailView,
     PositionDetailView,
     ProjectTypeDetailView,
+    ProjectCreateView,
 )
 
 
@@ -27,6 +28,7 @@ urlpatterns = [
     path("positions/<int:pk>/", PositionDetailView.as_view(), name="position-detail"),
     path("projects/", ProjectListView.as_view(), name="project-list"),
     path("projects/<int:pk>/", ProjectDetailView.as_view(), name="project-detail"),
+    path("projects/create/", ProjectCreateView.as_view(), name="project-create"),
 ]
 
 app_name = "management"
