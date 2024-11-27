@@ -98,3 +98,10 @@ class ProjectCreateView(generic.CreateView):
     fields = "__all__"
     success_url = reverse_lazy("management:project-list")
     template_name = "management/project_form.html"
+
+
+class ProjectUpdateView(generic.UpdateView):
+    model = Project
+    fields = "__all__"
+    success_url = reverse_lazy("management:project-list")
+    template_name = "management/project_form.html"
