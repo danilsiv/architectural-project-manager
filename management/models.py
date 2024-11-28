@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from architectural_project_manager import settings
+from management.validators import validate_future_date
 
 
 class ProjectType(models.Model):
@@ -78,7 +79,9 @@ class Project(models.Model):
     ]
     name = models.CharField(max_length=255)
     description = models.TextField()
-    deadline = models.DateField()
+    deadline = models.DateField(
+        validators=[validate_future_date]
+    )
     is_completed = models.BooleanField(default=False)
     priority = models.CharField(max_length=2, choices=PRIORITY_CHOICES, default="MP")
     project_type = models.ForeignKey(
