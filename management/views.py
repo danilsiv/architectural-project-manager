@@ -103,8 +103,10 @@ class ProjectCreateView(generic.CreateView):
 class ProjectUpdateView(generic.UpdateView):
     model = Project
     fields = "__all__"
-    success_url = reverse_lazy("management:project-list")
     template_name = "management/project_form.html"
+
+    def get_success_url(self) -> str:
+        return reverse_lazy("management:project-detail", kwargs={"pk": self.object.pk})
 
 
 class ProjectDeleteView(generic.DeleteView):
