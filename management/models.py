@@ -1,11 +1,15 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from architectural_project_manager import settings
-from management.validators import validate_future_date
+from management.validators import validate_future_date, validate_no_special_characters
+from django.core.validators import MinLengthValidator
 
 
 class ProjectType(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(
+        max_length=255,
+        validators=[validate_no_special_characters, MinLengthValidator(3)]
+    )
 
     class Meta:
         ordering = ["name",]
@@ -15,7 +19,10 @@ class ProjectType(models.Model):
 
 
 class Team(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(
+        max_length=255,
+        validators=[validate_no_special_characters, MinLengthValidator(3)]
+    )
     team_lead = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -60,7 +67,11 @@ class Worker(AbstractUser):
 
 
 class Position(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(
+        max_length=255,
+        unique=True,
+        validators=[validate_no_special_characters, MinLengthValidator(3)]
+    )
 
     class Meta:
         ordering = ["name",]
@@ -77,7 +88,10 @@ class Project(models.Model):
         ("LP", "Low Priority"),
         ("BL", "Backlog"),
     ]
-    name = models.CharField(max_length=255)
+    name = models.CharField(
+        max_length=255,
+        validators=[validate_no_special_characters, MinLengthValidator(3)]
+    )
     description = models.TextField()
     deadline = models.DateField(
         validators=[validate_future_date]
