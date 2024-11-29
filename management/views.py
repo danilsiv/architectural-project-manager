@@ -88,6 +88,14 @@ class PositionDetailView(generic.DetailView):
     def get_queryset(self) -> QuerySet:
         return super().get_queryset().prefetch_related("workers__team")
 
+class PositionCreateView(generic.CreateView):
+    model = Position
+    fields = "__all__"
+    template_name = "management/position_form.html"
+
+    def get_success_url(self) -> str:
+        return reverse_lazy("management:position-detail", kwargs={"pk": self.object.pk})
+
 
 class ProjectListView(generic.ListView):
     model = Project
@@ -105,8 +113,10 @@ class ProjectDetailView(generic.DetailView):
 class ProjectCreateView(generic.CreateView):
     model = Project
     fields = "__all__"
-    success_url = reverse_lazy("management:project-list")
     template_name = "management/project_form.html"
+
+    def get_success_url(self) -> str:
+        return reverse_lazy("management:project-detail", kwargs={"pk": self.object.pk})
 
 
 class ProjectUpdateView(generic.UpdateView):
