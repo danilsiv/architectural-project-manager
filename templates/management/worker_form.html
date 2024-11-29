@@ -13,13 +13,13 @@
 
 <section class="create-project py-5">
   <div class="container">
-    <h2 class="text-center mb-4 mt-6" style="color: #ce0f9c;">{{ object|yesno:"Update current,Create new" }} Project</h2>
+    <h2 class="text-center mb-4 mt-6" style="color: #ce0f9c;">{{ object|yesno:"Update personal data,Register new Worker" }}</h2>
     <div class="row justify-content-center">
       <div class="col-md-10 col-lg-8">
         <div class="card create-project-card">
           <div class="card-body">
 
-            <h5 class="card-title">{{ object|yesno:"Modify Project Information,Enter Project Details" }}</h5>
+            <h5 class="card-title">{{ object|yesno:"Modify Worker Information,Enter Personal Data" }}</h5>
             <form action="" method="post" novalidate>
               {% csrf_token %}
               <div class="form-group">
