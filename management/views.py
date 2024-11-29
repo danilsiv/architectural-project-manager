@@ -84,6 +84,12 @@ class WorkerUpdateView(generic.UpdateView):
         return reverse_lazy("management:worker-detail", kwargs={"pk": self.object.pk})
 
 
+class WorkerDeleteView(generic.DeleteView):
+    model = Worker
+    success_url = reverse_lazy("management:worker-list")
+    template_name = "management/worker_confirm_delete.html"
+
+
 class PositionListView(generic.ListView):
     model = Position
     queryset = Position.objects.exclude(
