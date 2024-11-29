@@ -75,6 +75,15 @@ class WorkerCreateView(generic.CreateView):
         return reverse_lazy("management:worker-detail", kwargs={"pk": self.object.pk})
 
 
+class WorkerUpdateView(generic.UpdateView):
+    model = Worker
+    fields = ("username", "first_name", "last_name", "email", "position", "team")
+    template_name = "management/worker_form.html"
+
+    def get_success_url(self) -> str:
+        return reverse_lazy("management:worker-detail", kwargs={"pk": self.object.pk})
+
+
 class PositionListView(generic.ListView):
     model = Position
     queryset = Position.objects.exclude(
