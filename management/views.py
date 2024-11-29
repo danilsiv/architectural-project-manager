@@ -121,6 +121,12 @@ class PositionUpdateView(generic.UpdateView):
         return reverse_lazy("management:position-detail", kwargs={"pk": self.object.pk})
 
 
+class PositionDeleteView(generic.DeleteView):
+    model = Position
+    success_url = reverse_lazy("management:position-list")
+    template_name = "management/position_confirm_delete.html"
+
+
 class ProjectListView(generic.ListView):
     model = Project
     paginate_by = 15
