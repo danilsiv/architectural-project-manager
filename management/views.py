@@ -7,6 +7,7 @@ from django.views import generic
 from management.models import (
     ProjectType, Team, Worker, Position, Project
 )
+from management.forms import WorkerCreationForm
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -64,6 +65,14 @@ class WorkerDetailView(generic.DetailView):
     def get_queryset(self) -> QuerySet:
         return super().get_queryset().select_related(
             "team").select_related("position")
+
+
+class WorkerCreateView(generic.CreateView):
+    model = Worker
+    form_class = WorkerCreationForm
+
+    def get_success_url(self) -> str:
+        return reverse_lazy("management:worker-detail", kwargs={"pk": self.object.pk})
 
 
 class PositionListView(generic.ListView):
