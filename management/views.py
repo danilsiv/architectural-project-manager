@@ -112,6 +112,15 @@ class PositionCreateView(generic.CreateView):
         return reverse_lazy("management:position-detail", kwargs={"pk": self.object.pk})
 
 
+class PositionUpdateView(generic.UpdateView):
+    model = Position
+    fields = "__all__"
+    template_name = "management/position_form.html"
+
+    def get_success_url(self) -> str:
+        return reverse_lazy("management:position-detail", kwargs={"pk": self.object.pk})
+
+
 class ProjectListView(generic.ListView):
     model = Project
     paginate_by = 15
