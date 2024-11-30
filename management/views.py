@@ -38,6 +38,15 @@ class ProjectTypeDetailView(generic.DetailView):
     context_object_name = "project_type"
 
 
+class ProjectTypeCreateView(generic.CreateView):
+    model = ProjectType
+    fields = "__all__"
+    template_name = "management/project_type_form.html"
+
+    def get_success_url(self) -> str:
+        return reverse_lazy("management:project-type-detail", kwargs={"pk": self.object.pk})
+
+
 class TeamListView(generic.ListView):
     model = Team
     queryset = Team.objects.select_related(
