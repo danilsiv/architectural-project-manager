@@ -56,6 +56,13 @@ class ProjectTypeUpdateView(generic.UpdateView):
         return reverse_lazy("management:project-type-detail", kwargs={"pk": self.object.pk})
 
 
+class ProjectTypeDeleteView(generic.DeleteView):
+    model = ProjectType
+    context_object_name = "project_type"
+    success_url = reverse_lazy("management:project-type-list")
+    template_name = "management/project_type_confirm_delete.html"
+
+
 class TeamListView(generic.ListView):
     model = Team
     queryset = Team.objects.select_related(

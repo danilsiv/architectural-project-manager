@@ -23,6 +23,7 @@ from management.views import (
     PositionDeleteView,
     ProjectTypeCreateView,
     ProjectTypeUpdateView,
+    ProjectTypeDeleteView,
 )
 
 
@@ -32,6 +33,7 @@ urlpatterns = [
     path("project-types/<int:pk>", ProjectTypeDetailView.as_view(), name="project-type-detail"),
     path("project-types/create/", ProjectTypeCreateView.as_view(), name="project-type-create"),
     path("project-types/<int:pk>/update/", ProjectTypeUpdateView.as_view(), name="project-type-update"),
+    path("project-types/<int:pk>/delete/", ProjectTypeDeleteView.as_view(), name="project-type-delete"),
     path("teams/", TeamListView.as_view(), name="team-list"),
     path("teams/<int:pk>/", TeamDetailView.as_view(), name="team-detail"),
     path("workers/", WorkerListView.as_view(), name="worker-list"),
