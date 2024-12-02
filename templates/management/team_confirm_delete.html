@@ -20,13 +20,13 @@
           <div class="card-body">
 
             <h5 class="card-title">Are you sure you want to delete team {{ team.name }}?</h5>
-            <p class="card-text">This action is irreversible and will permanently remove the project from the system.</p>
+            <p class="card-text">This action is irreversible and will permanently remove the team from the system.</p>
 
             <form action="" method="post">
               {% csrf_token %}
               <div class="d-flex justify-content-between">
                 <button type="submit" class="btn btn-danger" style="width: 48%;">Yes, delete</button>
-                <a href="{% url 'management:project-list' %}" class="btn btn-secondary" style="width: 48%;">Cancel</a>
+                <a href="{% url 'management:team-list' %}" class="btn btn-secondary" style="width: 48%;">Cancel</a>
               </div>
             </form>
 

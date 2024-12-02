@@ -25,16 +25,22 @@
                 <ul>
                   {% for worker in position.workers.all %}
                     <li>
-                      <a href="{% url 'management:worker-detail' worker.id %}">{{ worker.first_name }} {{ worker.last_name }}</a>
-                      {% if worker.team %}
-                        (<a href="{% url 'management:team-detail' worker.team.id %}">{{ worker.team.name }}</a>)
-                      {% endif %}
+                      <a href="{% url 'management:worker-detail' worker.id %}">{{ worker.first_name }} {{ worker.last_name }}
+                        {% if worker.team %}
+                          ({{ worker.team.name }})
+                        {% endif %}
+                      </a>
                     </li>
                   {% endfor %}
                 </ul>
               {% else %}
                 <p>No team members are currently assigned to this position.</p>
               {% endif %}
+            </div>
+
+            <div class="button-wrapper mt-4">
+              <a href="{% url 'management:position-update' position.id %}" class="btn btn-primary">Update</a>
+              <a href="{% url 'management:position-delete' position.id %}" class="btn btn-danger ml-3">Delete</a>
             </div>
 
           </div>
@@ -83,6 +89,43 @@ a {
 a:hover {
   color: #ce0f9c;
   font-weight: bold;
+}
+
+.button-wrapper {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-end;
+}
+
+.btn {
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.btn-primary {
+  background-color: #ce0f9c;
+  border-color: #ce0f9c;
+  color: white;
+  text-transform: uppercase;
+}
+
+.btn-primary:hover {
+  background-color: #ac0d84;
+  border-color: #ac0d84;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: white;
+  text-transform: uppercase;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #c82333;
 }
 </style>
 

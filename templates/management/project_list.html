@@ -12,8 +12,7 @@
 <section class="projects-table py-6">
   <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="text-left mt-6" style="color: #ce0f9c;">Projects List</h2>
-      <a href="{% url 'management:project-create' %}" class="btn-create-project">New Project</a>
+      <h2 class="text-left mt-5" style="color: #ce0f9c;">Project List</h2>
     </div>
     {% if project_list %}
       <table class="table table-striped">
@@ -76,26 +75,6 @@
 
   .text-danger {
     color: #e74c3c;
-  }
-
-  .btn-create-project {
-    display: inline-block;
-    padding: 8px 16px;
-    border: 2px solid #ce0f9c;
-    background-color: transparent;
-    color: #ce0f9c;
-    text-transform: uppercase;
-    font-weight: bold;
-    text-align: center;
-    font-size: 14px;
-    border-radius: 8px;
-    transition: none;
-  }
-
-  .btn-create-project:hover {
-    color: #ce0f9c;
-    border-color: #ce0f9c;
-    background-color: transparent;
   }
 
   .d-flex {

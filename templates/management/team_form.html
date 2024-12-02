@@ -37,7 +37,6 @@
                 {% if form.no_workers_message %}
                   <p class="text-danger">{{ form.no_workers_message }}</p>
                 {% else %}
-                  <label for="id_members">Team Members:</label>
                   {{ form.members|as_crispy_field }}
                 {% endif %}
               </div>
@@ -47,7 +46,6 @@
                 {% if form.no_projects_message %}
                   <p class="text-warning">{{ form.no_projects_message }}</p>
                 {% else %}
-                  <label for="id_projects">Projects:</label>
                   {{ form.projects|as_crispy_field }}
                 {% endif %}
               </div>

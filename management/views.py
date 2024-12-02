@@ -75,7 +75,7 @@ class TeamDetailView(generic.DetailView):
 
     def get_queryset(self) -> QuerySet:
         return super().get_queryset().prefetch_related(
-            "members__position").select_related("team_lead__position")
+            "members__position", "projects").select_related("team_lead__position")
 
 
 class TeamCreateView(generic.CreateView):
@@ -113,7 +113,7 @@ class TeamDeleteView(generic.DeleteView):
 
 class WorkerListView(generic.ListView):
     model = Worker
-    queryset = Worker.objects.select_related("position")
+    queryset = Worker.objects.exclude(position__name="admin").select_related("position")
     paginate_by = 15
 
 

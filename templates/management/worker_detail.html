@@ -19,10 +19,36 @@
 
             <h5 class="card-title">{{ worker.first_name }} {{ worker.last_name }}</h5>
             <p class="card-text"><strong>Username: </strong>{{ worker.username }}</p>
-            <p class="card-text"><strong>Email: </strong>{{ worker.email }}</p>
-            <p class="card-text"><strong>Last Login: </strong>{{ worker.last_login }}</p>
-            <p class="card-text"><strong>Team: <a href="#">{{ worker.position.name }}</a></strong></p>
-            <p class="card-text"><strong>Team: <a href="{% url 'management:team-detail' worker.team.id %}">{{ worker.team.name }}</a></strong></p>
+            <p class="card-text"><strong>Email: </strong>
+              {% if worker.email %}
+                {{ worker.email }}
+              {% else %}
+                {{ worker.first_name }}
+              {% endif %}
+            </p>
+
+            <p class="card-text"><strong>Last Login: </strong>
+              {% if worker.last_login %}
+                {{ worker.last_login }}
+              {% else %}
+                {{ worker.first_name }} has not logged in yet.
+              {% endif %}
+            </p>
+
+            <p class="card-text"><strong>Position: <a href="{% url 'management:position-detail' worker.position.id %}">{{ worker.position.name }}</a></strong></p>
+
+            <p class="card-text"><strong>Team: </strong>
+              {% if worker.team %}
+                <strong><a href="{% url 'management:team-detail' worker.team.id %}">{{ worker.team.name }}</a></strong>
+              {% else %}
+                {{ worker.first_name }} is currently not assigned to any team.
+              {% endif %}
+            </p>
+
+            <div class="button-wrapper mt-4">
+              <a href="{% url 'management:worker-update' worker.id %}" class="btn btn-primary">Update</a>
+              <a href="{% url 'management:worker-delete' worker.id %}" class="btn btn-danger">Delete</a>
+            </div>
 
           </div>
         </div>
@@ -52,12 +78,6 @@
   margin-bottom: 20px;
 }
 
-.worker-card .card-meta p {
-  font-size: 0.95rem;
-  margin: 4px 0;
-  color: #444;
-}
-
 .d-flex {
   display: flex;
   justify-content: space-between;
@@ -71,6 +91,43 @@ a {
 a:hover {
   color: #ce0f9c;
   font-weight: bold;
+}
+
+.button-wrapper {
+  display: flex;
+  gap: 20px; /* Додає відстань між кнопками */
+  justify-content: flex-end; /* Вирівнює кнопки праворуч */
+}
+
+.btn {
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.btn-primary {
+  background-color: #ce0f9c;
+  border-color: #ce0f9c;
+  color: white;
+  text-transform: uppercase;
+}
+
+.btn-primary:hover {
+  background-color: #ac0d84;
+  border-color: #ac0d84;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: white;
+  text-transform: uppercase;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #c82333;
 }
 </style>
 
