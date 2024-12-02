@@ -105,6 +105,12 @@ class TeamUpdateView(generic.UpdateView):
         return reverse_lazy("management:team-detail", kwargs={"pk": self.object.pk})
 
 
+class TeamDeleteView(generic.DeleteView):
+    model = Team
+    template_name = "management/team_confirm_delete.html"
+    success_url = reverse_lazy("management:team-list")
+
+
 class WorkerListView(generic.ListView):
     model = Worker
     queryset = Worker.objects.select_related("position")
