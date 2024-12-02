@@ -38,3 +38,17 @@ class TeamCreationForm(forms.ModelForm):
     class Meta:
         model = Team
         fields = ("name", "team_lead", "members", "projects")
+
+    def __init__(self, *args, **kwargs)  -> None:
+        super().__init__(*args, **kwargs)
+        if not Worker.objects.filter(team=None).exclude(position__name="admin").exists():
+            self.fields["members"].widget = forms.HiddenInput()
+            self.no_workers_message = "No available workers to assign."
+        else:
+            self.no_workers_message = None
+
+        if not Project.objects.filter(team=None).exists():
+            self.fields["projects"].widget = forms.HiddenInput()
+            self.no_projects_message = "No available projects to assign."
+        else:
+            self.no_projects_message = None
