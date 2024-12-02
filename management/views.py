@@ -7,7 +7,7 @@ from django.views import generic
 from management.models import (
     ProjectType, Team, Worker, Position, Project
 )
-from management.forms import WorkerCreationForm
+from management.forms import WorkerCreationForm, TeamCreationForm
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -76,6 +76,24 @@ class TeamDetailView(generic.DetailView):
     def get_queryset(self) -> QuerySet:
         return super().get_queryset().prefetch_related(
             "members__position").select_related("team_lead__position")
+
+
+class TeamCreateView(generic.CreateView):
+    model = Team
+    form_class = TeamCreationForm
+    template_name = "management/team_form.html"
+
+    def form_valid(self, form) -> HttpResponse:
+        response = super().form_valid(form)
+        team = self.object
+
+        form.cleaned_data["workers"].update(team=team)
+        form.cleaned_data["projects"].update(team=team)
+
+        return response
+
+    def get_success_url(self) -> str:
+        return reverse_lazy("management:project-type-detail", kwargs={"pk": self.object.pk})
 
 
 class WorkerListView(generic.ListView):
