@@ -87,13 +87,22 @@ class TeamCreateView(generic.CreateView):
         response = super().form_valid(form)
         team = self.object
 
-        form.cleaned_data["workers"].update(team=team)
+        form.cleaned_data["members"].update(team=team)
         form.cleaned_data["projects"].update(team=team)
 
         return response
 
     def get_success_url(self) -> str:
-        return reverse_lazy("management:project-type-detail", kwargs={"pk": self.object.pk})
+        return reverse_lazy("management:team-detail", kwargs={"pk": self.object.pk})
+
+
+class TeamUpdateView(generic.UpdateView):
+    model = Team
+    form_class = TeamCreationForm
+    template_name = "management/team_form.html"
+
+    def get_success_url(self) -> str:
+        return reverse_lazy("management:team-detail", kwargs={"pk": self.object.pk})
 
 
 class WorkerListView(generic.ListView):
