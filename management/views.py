@@ -27,6 +27,9 @@ def index(request: HttpRequest) -> HttpResponse:
         request, "management/index.html", context=context
     )
 
+def instruction_view(request: HttpRequest) -> HttpResponse:
+    return render(request, "management/instruction.html")
+
 
 class ProjectTypeListView(generic.ListView):
     model = ProjectType

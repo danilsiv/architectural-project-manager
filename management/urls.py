@@ -2,6 +2,7 @@ from django.urls import path
 
 from management.views import (
     index,
+    instruction_view,
     ProjectTypeListView,
     TeamListView,
     WorkerListView,
@@ -32,6 +33,7 @@ from management.views import (
 
 urlpatterns = [
     path("", index, name="index"),
+    path("instruction/", instruction_view, name="instruction"),
     path("project-types/", ProjectTypeListView.as_view(), name="project-type-list"),
     path("project-types/<int:pk>", ProjectTypeDetailView.as_view(), name="project-type-detail"),
     path("project-types/create/", ProjectTypeCreateView.as_view(), name="project-type-create"),
