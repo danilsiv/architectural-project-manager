@@ -7,7 +7,11 @@ from django.views import generic
 from management.models import (
     ProjectType, Team, Worker, Position, Project
 )
-from management.forms import WorkerCreationForm, TeamCreationForm
+from management.forms import (
+    WorkerCreationForm,
+    TeamCreationForm,
+    TeamUpdateForm
+)
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -98,7 +102,7 @@ class TeamCreateView(generic.CreateView):
 
 class TeamUpdateView(generic.UpdateView):
     model = Team
-    form_class = TeamCreationForm
+    form_class = TeamUpdateForm
     template_name = "management/team_form.html"
 
     def get_success_url(self) -> str:
