@@ -7,6 +7,8 @@
 
 {% block body_class %} index-page {% endblock body_class %}
 
+{% load crispy_forms_filters %}
+
 {% block content %}
 
 <section class="projects-table py-6">
@@ -14,6 +16,23 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h2 class="text-left mt-5" style="color: #ce0f9c;">Project List</h2>
     </div>
+
+    <div class="d-flex justify-content-start mb-4">
+      <form method="GET" action="" class="d-flex search-form">
+        {% csrf_token %}
+        <div class="input-group w-100">
+          {{ search_form|crispy }}
+          <button
+            type="submit"
+            class="btn d-flex align-items-center justify-content-center"
+            style="border: none; background: white; padding: 0 1rem; border-left: 1px solid #ced4da; border-radius: 0.5rem; margin-left: 2px;"
+          >
+            <i class="fa fa-search" style="color: #ce0f9c; font-size: 1.2rem;"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+
     {% if project_list %}
       <table class="table table-striped">
         <thead>

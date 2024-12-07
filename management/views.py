@@ -10,7 +10,8 @@ from management.models import (
 from management.forms import (
     WorkerCreationForm,
     TeamCreationForm,
-    TeamUpdateForm
+    TeamUpdateForm,
+    ProjectSearchForm
 )
 
 
@@ -195,6 +196,22 @@ class PositionDeleteView(generic.DeleteView):
 class ProjectListView(generic.ListView):
     model = Project
     paginate_by = 15
+
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
+        context = super(ProjectListView, self).get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+        context["name"] = name
+        context["search_form"] = ProjectSearchForm(
+            initial={"name": name}
+        )
+        return context
+
+    def get_queryset(self):
+        form = ProjectSearchForm(self.request.GET)
+        if form.is_valid():
+            return Project.objects.filter(name__icontains=form.cleaned_data["name"])
+        return Project.objects.all()
+
 
 
 class ProjectDetailView(generic.DetailView):
