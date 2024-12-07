@@ -91,3 +91,16 @@ class TeamUpdateForm(forms.ModelForm):
             team.team_lead = self.cleaned_data["team_lead"]
             team.save()
         return team
+
+
+class ProjectSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Search by name"
+            }
+        )
+    )
