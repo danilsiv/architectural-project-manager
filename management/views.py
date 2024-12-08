@@ -3,6 +3,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
+from django.db.models import Q
 
 from management.models import (
     ProjectType, Team, Worker, Position, Project
@@ -11,7 +12,8 @@ from management.forms import (
     WorkerCreationForm,
     TeamCreationForm,
     TeamUpdateForm,
-    ProjectSearchForm
+    ProjectSearchForm,
+    WorkerSearchForm
 )
 
 
@@ -123,6 +125,55 @@ class WorkerListView(generic.ListView):
     model = Worker
     queryset = Worker.objects.exclude(position__name="admin").select_related("position")
     paginate_by = 15
+
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
+        context = super(WorkerListView, self).get_context_data(**kwargs)
+        search = self.request.GET.get("search", "")
+        context["search"] = search
+        context["search_form"] = WorkerSearchForm(
+            initial={"search": search}
+        )
+        return context
+
+    def get_queryset(self) -> QuerySet:
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get("search", "").strip()
+
+        if search_query:
+            search_values = search_query.split()
+            filters = Q()
+
+            if len(search_values) == 1:
+                filters |= Q(first_name__icontains=search_values[0])
+                filters |= Q(last_name__icontains=search_values[0])
+                filters |= Q(position__name__icontains=search_values[0])
+
+            elif len(search_values) == 2:
+                filters |= Q(
+                    first_name__icontains=search_values[0],
+                    last_name__icontains=search_values[1]
+                )
+                filters |= Q(
+                    first_name__icontains=search_values[1],
+                    last_name__icontains=search_values[0]
+                )
+
+            elif len(search_values) == 3:
+                filters |= Q(
+                    first_name__icontains=search_values[0],
+                    last_name__icontains=search_values[1],
+                    position__name__icontains=search_values[2]
+                )
+                filters |= Q(
+                    first_name__icontains=search_values[1],
+                    last_name__icontains=search_values[0],
+                    position__name__icontains=search_values[2]
+                )
+            elif len(search_values) > 3:
+                return Worker.objects.none()
+            queryset = queryset.filter(filters)
+
+        return queryset
 
 
 class WorkerDetailView(generic.DetailView):
