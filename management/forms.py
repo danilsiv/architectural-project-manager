@@ -104,3 +104,16 @@ class ProjectSearchForm(forms.Form):
             }
         )
     )
+
+
+class WorkerSearchForm(forms.Form):
+    search = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Search"
+            }
+        )
+    )
