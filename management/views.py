@@ -41,7 +41,8 @@ class ProjectTypeListView(LoginRequiredMixin, generic.ListView):
     model = ProjectType
     template_name = "management/project_type_list.html"
     context_object_name = "project_type_list"
-    queryset = ProjectType.objects.annotate(project_count=Count("projects"))
+    queryset = ProjectType.objects.annotate(project_count=Count(
+        "projects")).order_by("name")
     paginate_by = 15
 
 
@@ -79,7 +80,7 @@ class ProjectTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
 class TeamListView(LoginRequiredMixin, generic.ListView):
     model = Team
     queryset = Team.objects.select_related(
-        "team_lead__position").annotate(member_count=Count("members"))
+        "team_lead__position").annotate(member_count=Count("members")).order_by("name")
     paginate_by = 10
 
 
@@ -212,7 +213,7 @@ class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
 class PositionListView(LoginRequiredMixin, generic.ListView):
     model = Position
     queryset = Position.objects.exclude(
-        name="admin").annotate(worker_count=Count("workers"))
+        name="admin").annotate(worker_count=Count("workers")).order_by("name")
     paginate_by = 15
 
 
