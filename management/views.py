@@ -101,8 +101,8 @@ class TeamCreateView(LoginRequiredMixin, generic.CreateView):
         response = super().form_valid(form)
         team = self.object
 
-        form.cleaned_data["members"].update(team=team)
-        form.cleaned_data["projects"].update(team=team)
+        team.members.set(form.cleaned_data["members"])
+        team.projects.set(form.cleaned_data["projects"])
 
         return response
 
