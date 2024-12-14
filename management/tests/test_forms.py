@@ -69,6 +69,15 @@ class WorkerCreationFormTests(TestCase):
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, updated_data)
 
+    def test_empty_optional_fields(self) -> None:
+        self.form_data.pop("first_name")
+        self.form_data.pop("last_name")
+        self.form_data.pop("email")
+        self.form_data.pop("team")
+
+        form = WorkerCreationForm(data=self.form_data)
+        self.assertTrue(form.is_valid())
+
     def test_form_invalid_when_required_fields_missing(self) -> None:
         self.form_data.pop("username")
 
