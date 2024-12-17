@@ -1,8 +1,9 @@
 from django.core.exceptions import ValidationError
 from django.utils.timezone import now
+from datetime import date
 
 
-def validate_future_date(value: str) -> None:
+def validate_future_date(value: date) -> None:
     if value < now().date():
         raise ValidationError("Deadline cannot be in the past")
 
