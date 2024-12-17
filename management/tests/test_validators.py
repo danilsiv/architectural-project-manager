@@ -1,10 +1,11 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
+from django.utils.functional import empty
 from django.utils.timezone import now
 from datetime import datetime
 from datetime import date
 
-from management.validators import validate_future_date
+from management.validators import validate_future_date, validate_no_special_characters
 
 
 class ValidateFutureDateTests(TestCase):
@@ -31,5 +32,30 @@ class ValidateFutureDateTests(TestCase):
         current_date = now().date()
         try:
             validate_future_date(current_date)
+        except ValidationError:
+            self.fail("ValidationError was raised unexpectedly!")
+
+
+class ValidateNoSpecialCharactersTests(TestCase):
+    def test_validation_error_should_be_raised(self) -> None:
+        list_of_character_exceptions = list("!@$%^&*()[]{}")
+        for character in list_of_character_exceptions:
+            self.assertRaises(
+                ValidationError,
+                validate_no_special_characters,
+                character
+            )
+
+    def test_value_without_special_characters(self) -> None:
+        valid_value = "Valid Value"
+        try:
+            validate_no_special_characters(valid_value)
+        except ValidationError:
+            self.fail("ValidationError was raised unexpectedly!")
+
+    def test_empty_value(self) -> None:
+        empty_value = ""
+        try:
+            validate_no_special_characters(empty_value)
         except ValidationError:
             self.fail("ValidationError was raised unexpectedly!")
