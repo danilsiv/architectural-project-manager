@@ -62,9 +62,6 @@ class Worker(AbstractUser):
         position_name = self.position.name if self.position else "No Position"
         return f"{self.first_name} {self.last_name} ({position_name})"
 
-    def get_absolute_url(self) -> str:
-        pass
-
 
 class Position(models.Model):
     name = models.CharField(
@@ -124,9 +121,6 @@ class Project(models.Model):
             ),
             "deadline"
         ]
-
-    def get_absolute_url(self) -> str:
-        pass
 
     def __str__(self) -> str:
         return self.name

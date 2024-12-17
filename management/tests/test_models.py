@@ -53,9 +53,6 @@ class WorkerTest(TestCase):
         self.assertEqual(worker.position, position)
         self.assertEqual(worker.team, team)
 
-    def test_absolute_url(self) -> None:
-        pass
-
 
 class PositionTest(TestCase):
     def test_str_method(self) -> None:
@@ -73,6 +70,3 @@ class ProjectTest(TestCase):
             project_type=project_type,
         )
         self.assertEqual(str(project), project.name)
-
-    def test_get_absolute_url(self) -> None:
-        pass
