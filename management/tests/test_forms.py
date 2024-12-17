@@ -1,6 +1,10 @@
 from django.test import TestCase
 
-from management.forms import WorkerCreationForm, TeamCreationForm
+from management.forms import (
+    WorkerCreationForm,
+    TeamCreationForm,
+    TeamUpdateForm
+)
 from management.models import Worker, Position, Team, Project, ProjectType
 
 
@@ -109,7 +113,7 @@ class WorkerCreationFormTests(TestCase):
         self.assertIn("team", form.errors)
 
 
-class TeamCreationFormTests(TestCase):
+class TeamBaseTest(TestCase):
     def create_worker(self, username: str) -> Worker:
         return Worker.objects.create_user(
             username=username, password="test123user", position=self.position
@@ -122,6 +126,28 @@ class TeamCreationFormTests(TestCase):
             deadline="2027-12-12",
             project_type=self.project_type
         )
+
+    def form_data_is_valid(self, form) -> None:
+        self.form_data["team_lead"] = Worker.objects.get(id=self.form_data["team_lead"])
+        self.form_data["members"] = Worker.objects.filter()
+        self.form_data["projects"] = Project.objects.all()
+
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data["name"], self.form_data["name"])
+        self.assertEqual(form.cleaned_data["team_lead"], self.form_data["team_lead"])
+        self.assertEqual(list(form.cleaned_data["members"]), list(self.form_data["members"]))
+        self.assertEqual(list(form.cleaned_data["projects"]), list(self.form_data["projects"]))
+
+    def form_invalid_with_nonexistent_related_objects(self, form_class, instance=None) -> None:
+        self.form_data["team_lead"] = 9999
+        self.form_data["members"] = [9999, 9999]
+        self.form_data["projects"] = [9999, 9999]
+
+        form = form_class(data=self.form_data, instance=instance)
+        self.assertFalse(form.is_valid())
+        self.assertIn("team_lead", form.errors)
+        self.assertIn("members", form.errors)
+        self.assertIn("projects", form.errors)
 
     def setUp(self) -> None:
         self.position = Position.objects.create(name="test_position")
@@ -139,17 +165,11 @@ class TeamCreationFormTests(TestCase):
             "projects": [project.id for project in Project.objects.all()]
         }
 
+
+class TeamCreationFormTests(TeamBaseTest):
     def test_creation_form_data_is_valid(self) -> None:
         form = TeamCreationForm(data=self.form_data)
-        self.form_data["team_lead"] = Worker.objects.get(id=self.form_data["team_lead"])
-        self.form_data["members"] = Worker.objects.all()
-        self.form_data["projects"] = Project.objects.all()
-
-        self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data["name"], self.form_data["name"])
-        self.assertEqual(form.cleaned_data["team_lead"], self.form_data["team_lead"])
-        self.assertEqual(list(form.cleaned_data["members"]), list(self.form_data["members"]))
-        self.assertEqual(list(form.cleaned_data["projects"]), list(self.form_data["projects"]))
+        self.form_data_is_valid(form)
 
     def test_empty_optional_fields(self) -> None:
         self.form_data["members"] = []
@@ -169,17 +189,13 @@ class TeamCreationFormTests(TestCase):
         self.assertIn("team_lead", form.errors)
 
     def test_form_invalid_with_nonexistent_related_object(self) -> None:
-        self.form_data["team_lead"] = 9999
-        self.form_data["members"] = [9999, 9999]
-        self.form_data["projects"] = [9999, 9999]
+        self.form_invalid_with_nonexistent_related_objects(TeamCreationForm)
 
-        form = TeamCreationForm(data=self.form_data)
-        self.assertFalse(form.is_valid())
-        self.assertIn("team_lead", form.errors)
-        self.assertIn("members", form.errors)
-        self.assertIn("projects", form.errors)
-
-    def test_team_lead_and_workers_queryset_excludes_admin_and_assigned_workers(self) -> None:
+    def test_queryset_for_team_lead_and_workers(self) -> None:
+        """
+        Tests that the team lead and members querysets exclude workers
+        with 'admin' position and those already assigned to other teams.
+        """
         worker_admin = self.create_worker("worker_admin")
         worker_admin.position = Position.objects.create(name="admin")
         worker_admin.save()
@@ -207,3 +223,63 @@ class TeamCreationFormTests(TestCase):
 
         self.assertNotIn(assigned_project, projects_queryset)
         self.assertIn(unassigned_project, projects_queryset)
+
+
+class TeamUpdateFormTests(TeamBaseTest):
+    def setUp(self) -> None:
+        super().setUp()
+        self.team = Team.objects.create(name="new_team", team_lead=self.team_lead)
+
+    def test_update_form_is_valid(self) -> None:
+        form = TeamUpdateForm(data=self.form_data, instance=self.team)
+        self.form_data_is_valid(form)
+
+    def test_form_invalid_with_nonexistent_related_objects(self) -> None:
+        self.form_invalid_with_nonexistent_related_objects(TeamUpdateForm, self.team)
+
+    def test_queryset_for_team_lead_and_members(self) -> None:
+        """
+        Tests that the team lead and members querysets exclude workers
+        with an 'admin' position or workers already assigned to other teams,
+        while including workers assigned to the current team.
+        """
+        worker_admin = self.create_worker("worker_admin")
+        worker_admin.position = Position.objects.create(name="admin")
+        worker_admin.save()
+
+        another_team = Team.objects.create(name="another_team", team_lead=worker_admin)
+        worker_assigned_another_team = self.create_worker("some_worker")
+        another_team.members.set([worker_assigned_another_team])
+
+        worker_assigned_this_team = self.worker_1
+        unassigned_worker = self.worker_2
+        self.team.members.set([worker_assigned_this_team])
+
+        form = TeamUpdateForm(instance=self.team)
+
+        team_lead_queryset = form.fields["team_lead"].queryset
+        workers_queryset = form.fields["members"].queryset
+
+        self.assertNotIn(worker_assigned_another_team, team_lead_queryset)
+        self.assertNotIn(worker_admin, team_lead_queryset)
+        self.assertIn(worker_assigned_this_team, team_lead_queryset)
+        self.assertIn(unassigned_worker, team_lead_queryset)
+        self.assertEqual(list(team_lead_queryset), list(workers_queryset))
+
+    def test_queryset_for_projects(self) -> None:
+        """
+        Tests that the projects queryset excludes projects already assigned
+        to other teams while including the projects assigned to the current team.
+        """
+        another_team = Team.objects.create(name="another_team", team_lead=self.worker_1)
+        project_assigned_another_team = self.create_project(name="first_project")
+        another_team.projects.set([project_assigned_another_team])
+
+        project_assigned_this_team = self.create_project(name="second_project")
+        self.team.projects.set([project_assigned_this_team])
+        unassigned_project = self.create_project(name="third_project")
+        project_queryset = TeamUpdateForm(instance=self.team).fields["projects"].queryset
+
+        self.assertNotIn(project_assigned_another_team, project_queryset)
+        self.assertIn(project_assigned_this_team, project_queryset)
+        self.assertIn(unassigned_project, project_queryset)
