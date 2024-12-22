@@ -129,13 +129,16 @@ class TeamBaseTest(TestCase):
 
     def form_data_is_valid(self, form) -> None:
         self.form_data["team_lead"] = Worker.objects.get(id=self.form_data["team_lead"])
-        self.form_data["members"] = Worker.objects.filter()
+        self.form_data["members"] = Worker.objects.all()
         self.form_data["projects"] = Project.objects.all()
 
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data["name"], self.form_data["name"])
         self.assertEqual(form.cleaned_data["team_lead"], self.form_data["team_lead"])
-        self.assertEqual(list(form.cleaned_data["members"]), list(self.form_data["members"]))
+        self.assertEqual(
+            sorted(list(form.cleaned_data["members"]), key=lambda x: x.id),
+            sorted(list(self.form_data["members"]), key=lambda x: x.id)
+        )
         self.assertEqual(list(form.cleaned_data["projects"]), list(self.form_data["projects"]))
 
     def form_invalid_with_nonexistent_related_objects(self, form_class, instance=None) -> None:

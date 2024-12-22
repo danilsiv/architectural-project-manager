@@ -38,18 +38,19 @@ class LoginRequiredTest(TestCase):
     ]
 
     def setUp(self) -> None:
-        project_type = ProjectType.objects.create(name="test_project_type")
-        position = Position.objects.create(name="test_position")
+        project_type = ProjectType.objects.create(pk=1, name="test_project_type")
+        position = Position.objects.create(pk=1, name="test_position")
         self.worker = get_user_model().objects.create_user(
-            username="test_user", password="test123user", position=position
+            pk=1, username="test_user", password="test123user", position=position
         )
         Project.objects.create(
+            pk=1,
             name="test_project",
             description="test_description",
             deadline="2026-12-12",
             project_type=project_type,
         )
-        Team.objects.create(name="test_team", team_lead=self.worker)
+        Team.objects.create(pk=1, name="test_team", team_lead=self.worker)
 
     def test_redirect_for_unauthenticated_users_without_pk(self) -> None:
         """
