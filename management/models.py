@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from architectural_project_manager import settings
+from architectural_project_manager.settings import base
 from management.validators import validate_future_date, validate_no_special_characters
 from django.core.validators import MinLengthValidator
 
@@ -24,7 +24,7 @@ class Team(models.Model):
         validators=[validate_no_special_characters, MinLengthValidator(3)]
     )
     team_lead = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
+        base.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         related_name="leading_team",
         null=True,
